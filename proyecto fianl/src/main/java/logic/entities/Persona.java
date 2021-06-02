@@ -21,6 +21,7 @@ public class Persona {
         this.isVictim = isVictim;
         this.aggressionType = aggressionType;
         this.side = side;
+        this.full = this.name + " " + this.lastName;
     }
 
     public String getName() {
@@ -85,5 +86,9 @@ public class Persona {
 
     public String getFull() {
         return full;
+    }
+    public void prueba()
+    {
+        System.out.println("Hola");
     }
 }
