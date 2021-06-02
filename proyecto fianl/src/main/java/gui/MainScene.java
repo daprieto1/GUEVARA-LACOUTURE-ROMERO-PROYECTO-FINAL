@@ -30,16 +30,33 @@ public class MainScene extends Application {
     private VBox layout2;
     private VBox layout3;
     private VBox infoLayout;
+    private VBox crudVBox;
 
-    //VisualProperties
-    private Scene scene;
-    private TableView<Persona> personasTable;
+    //Hbox
+    private HBox hBox1;
+    private HBox hBox2;
+    private HBox hBox3;
+
+    //Buttons
+    private Button selectPersona;
+    private Button addPersona;
+    private Button deletePersona;
+
+    //TextFields
+    private TextField nameInput;
+    private TextField lastNameInput;
+    private TextField ageInput;
+
+    //Labels
     private Label nameTitle;
     private Label ageInfo;
     private Label victimInfo;
     private Label aggressionInfo;
     private Label sideInfo;
-    private Button selectPersona;
+
+    //VisualProperties
+    private Scene scene;
+    private TableView<Persona> personasTable;
 
     //Menu
     private MenuBar menuBar;
@@ -114,7 +131,7 @@ public class MainScene extends Application {
         setUpInputs();
         setupTable();
         setUpMenu();
-        setUpvBox();
+        setUplayout();
 
         BorderPane layout = new BorderPane();
         layout.setLeft(layout3);
@@ -131,6 +148,18 @@ public class MainScene extends Application {
         selectPersona = new Button("Select");
         selectPersona.setMinWidth(30);
         selectPersona.setPadding(new Insets(20));
+
+        addPersona = new Button("Add");
+        addPersona.setMinWidth(250);
+        addPersona.setPadding(new Insets(20,20,20,20));
+
+
+
+        deletePersona = new Button("Delete");
+        deletePersona.setMinWidth(250);
+        deletePersona.setPadding(new Insets(20));
+
+
     }
     private void setupTable()
     {
@@ -143,13 +172,25 @@ public class MainScene extends Application {
 
         personasTable = new TableView<>();
         personasTable.setMinWidth(400);
-        personasTable.setMinHeight(700);
+        personasTable.setMinHeight(780);
         personasTable.getColumns().addAll(actoresColumn);
         personasTable.setBorder(new Border(new BorderStroke(Color.valueOf("#4498C4"), BorderStrokeStyle.SOLID,CornerRadii.EMPTY,new BorderWidths(5),new Insets(20,20,20,20))));
 
     }
     private void setUpInputs()
     {
+        nameInput = new TextField();
+        nameInput.setPromptText("Nombre");
+        nameInput.setMinWidth(177);
+
+        lastNameInput = new TextField();
+        lastNameInput.setPromptText("Apellido");
+        lastNameInput.setMinWidth(177);
+
+        ageInput = new TextField();
+        ageInput.setPromptText("Edad");
+        ageInput.setMinWidth(177);
+
 
     }
     private void setUpMenu()
@@ -170,13 +211,13 @@ public class MainScene extends Application {
         menuBar.getMenus().addAll(directoryMenu,summaryMenu);
 
     }
-    private void setUpvBox()
+    private void setUplayout()
     {
         layout2 = new VBox();
 
 
         layout3 = new VBox();
-        layout3.getChildren().addAll(personasTable,selectPersona);
+        layout3.getChildren().addAll(personasTable);
 
 
 
@@ -212,10 +253,29 @@ public class MainScene extends Application {
         this.aggressionInfo = new Label("Tipo de agresion: ");
         this.aggressionInfo.setMinWidth(600);
         this.aggressionInfo.setAlignment(Pos.TOP_LEFT);
-        this.aggressionInfo.setPadding(new Insets(5,20,5,20));
+        this.aggressionInfo.setPadding(new Insets(5,20,30,20));
         this.aggressionInfo.setFont(new Font(20));
 
-        infoLayout.getChildren().addAll(ageInfo,sideInfo,victimInfo,aggressionInfo);
-        layout2.getChildren().addAll(nameTitle,infoLayout);
+        selectPersona.setMinWidth(550);
+        selectPersona.setAlignment(Pos.BOTTOM_CENTER);
+
+
+
+        hBox1 = new HBox();
+        hBox1.getChildren().addAll(addPersona,deletePersona);
+        hBox1.setPadding(new Insets(20,0,20,0));
+        hBox1.setSpacing(50);
+        hBox2 = new HBox();
+        hBox2.getChildren().addAll(nameInput,lastNameInput,ageInput);
+        hBox2.setPadding(new Insets(20,0,20,0));
+        hBox2.setSpacing(10);
+        hBox3 = new HBox();
+
+
+        crudVBox= new VBox();
+        crudVBox.getChildren().addAll(hBox2,hBox3,hBox1);
+
+        infoLayout.getChildren().addAll(ageInfo,sideInfo,victimInfo,aggressionInfo,selectPersona);
+        layout2.getChildren().addAll(nameTitle,infoLayout,crudVBox);
     }
 }
