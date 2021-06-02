@@ -7,17 +7,17 @@ public class Persona {
     private String name;
     private String lastName;
     private int age;
-    private String type;
+
     private boolean isVictim;
     private Enum aggressionType;
     private Enum side;
+    private String fullName = getName()+" "+getLastName();
 
 
-    public Persona(String name, String lastName, int age, String type, boolean isVictim, Enum aggressionType, Enum side) {
+    public Persona(String name, String lastName, int age, boolean isVictim, Enum aggressionType, Enum side) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
-        this.type = type;
         this.isVictim = isVictim;
         this.aggressionType = aggressionType;
         this.side = side;
@@ -33,10 +33,6 @@ public class Persona {
 
     public int getAge() {
         return age;
-    }
-
-    public String getType() {
-        return type;
     }
 
     public boolean isVictim() {
@@ -70,10 +66,6 @@ public class Persona {
         } catch (NumberFormatException er) {
             throw new PersonaException(PersonaException.BAD_AGE + " : " + er.getMessage());
         }
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public void setVictim(boolean victim) {

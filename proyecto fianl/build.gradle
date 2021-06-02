@@ -1,27 +1,34 @@
 plugins {
     id 'java'
-    id 'org.openjfx.javafxplugin' version '0.0.7'
+    id 'org.openjfx.javafxplugin' version '0.0.9'
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
-
-sourceCompatibility = 11
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    compile group: 'com.github.javafaker', name: 'javafaker', version: '0.15'
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation(platform('org.junit:junit-bom:5.7.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
 }
 
 test {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
+
 javafx {
-    modules = [ 'javafx.controls' , 'javafx.fxml' ]
     version = "11.0.2"
+    modules = [ 'javafx.controls' ]
 }
+
 

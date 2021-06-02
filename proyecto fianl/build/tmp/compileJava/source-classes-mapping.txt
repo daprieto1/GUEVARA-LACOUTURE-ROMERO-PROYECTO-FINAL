@@ -1,0 +1,12 @@
+logic/entities/Side.java
+ logic.entities.Side
+logic/entities/Persona.java
+ logic.entities.Persona
+logic/PersonaException.java
+ logic.PersonaException
+logic/entities/AggressionType.java
+ logic.entities.AggressionType
+gui/MainScene.java
+ gui.MainScene
+logic/persistence/IPersonaPersistence.java
+ logic.persistence.IPersonaPersistence
