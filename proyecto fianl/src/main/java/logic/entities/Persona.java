@@ -11,10 +11,10 @@ public class Persona {
     private boolean isVictim;
     private Enum aggressionType;
     private Enum side;
-    private String fullName = getName()+" "+getLastName();
+    private String full;
 
 
-    public Persona(String name, String lastName, int age, boolean isVictim, Enum aggressionType, Enum side) {
+    public Persona(String name, String lastName, int age, boolean isVictim, Enum aggressionType, Enum side) throws PersonaException {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
@@ -78,5 +78,12 @@ public class Persona {
 
     public void setSide(Enum side) {
         this.side = side;
+    }
+    public void setFull(String name, String lastName) {
+        this.full = name + " "+ lastName;
+    }
+
+    public String getFull() {
+        return full;
     }
 }
