@@ -29,6 +29,7 @@ public class MainScene extends Application {
     //Vbox
     private VBox layout2;
     private VBox layout3;
+    private VBox infoLayout;
 
     //VisualProperties
     private Scene scene;
@@ -93,7 +94,15 @@ public class MainScene extends Application {
 
         selectPersona.setOnAction(e ->
         {
+            String isVictim = "NO";
+
             nameTitle.setText( personasTable.getSelectionModel().getSelectedItem().getFull());
+            ageInfo.setText("Edad: "+personasTable.getSelectionModel().getSelectedItem().getAge());
+            sideInfo.setText("Bando: "+personasTable.getSelectionModel().getSelectedItem().getSide());
+            if (personasTable.getSelectionModel().getSelectedItem().isVictim())
+                isVictim="SI";
+            victimInfo.setText("Es victima?: "+isVictim);
+            aggressionInfo.setText("Tipo de agresion: "+ personasTable.getSelectionModel().getSelectedItem().getAggressionType());
         });
 
 
@@ -180,9 +189,33 @@ public class MainScene extends Application {
         this.nameTitle.setFont(Font.font("Arial", FontWeight.BOLD,35));
 
         //
-        VBox infoLayout = new VBox();
+        infoLayout = new VBox();
 
+        this.ageInfo = new Label("Edad: ");
+        this.ageInfo.setMinWidth(600);
+        this.ageInfo.setAlignment(Pos.TOP_LEFT);
+        this.ageInfo.setPadding(new Insets(5,20,5,20));
+        this.ageInfo.setFont(new Font(20));
 
+        this.sideInfo = new Label("Bando: ");
+        this.sideInfo.setMinWidth(600);
+        this.sideInfo.setAlignment(Pos.TOP_LEFT);
+        this.sideInfo.setPadding(new Insets(5,20,5,20));
+        this.sideInfo.setFont(new Font(20));
+
+        this.victimInfo = new Label("Es victima?: ");
+        this.victimInfo.setMinWidth(600);
+        this.victimInfo.setAlignment(Pos.TOP_LEFT);
+        this.victimInfo.setPadding(new Insets(5,20,5,20));
+        this.victimInfo.setFont(new Font(20));
+
+        this.aggressionInfo = new Label("Tipo de agresion: ");
+        this.aggressionInfo.setMinWidth(600);
+        this.aggressionInfo.setAlignment(Pos.TOP_LEFT);
+        this.aggressionInfo.setPadding(new Insets(5,20,5,20));
+        this.aggressionInfo.setFont(new Font(20));
+
+        infoLayout.getChildren().addAll(ageInfo,sideInfo,victimInfo,aggressionInfo);
         layout2.getChildren().addAll(nameTitle,infoLayout);
     }
 }
