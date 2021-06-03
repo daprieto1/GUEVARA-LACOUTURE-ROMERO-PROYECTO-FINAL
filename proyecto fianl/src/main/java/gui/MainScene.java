@@ -1,6 +1,7 @@
 package gui;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,8 +21,10 @@ import logic.entities.Side;
 import logic.services.impl.IPersonaServices;
 import logic.services.impl.PersonaServices;
 
+import javax.swing.text.LabelView;
 import javax.xml.crypto.NodeSetData;
 import java.util.HashMap;
+import java.util.IllegalFormatCodePointException;
 import java.util.Map;
 
 public class MainScene extends Application {
@@ -36,6 +39,7 @@ public class MainScene extends Application {
     private HBox hBox1;
     private HBox hBox2;
     private HBox hBox3;
+    private HBox hBox4;
 
     //Buttons
     private Button selectPersona;
@@ -46,6 +50,11 @@ public class MainScene extends Application {
     private TextField nameInput;
     private TextField lastNameInput;
     private TextField ageInput;
+
+    //ChoiceBoxes
+    private ChoiceBox isVictim;
+    private ChoiceBox side;
+    private ChoiceBox aggression;
 
     //Labels
     private Label nameTitle;
@@ -122,7 +131,45 @@ public class MainScene extends Application {
             aggressionInfo.setText("Tipo de agresion: "+ personasTable.getSelectionModel().getSelectedItem().getAggressionType());
         });
 
+        addPersona.setOnAction(e ->
+        {
+            boolean victim = false;
+            Enum aggressionType = AggressionType.NO_APLICA;
+            Enum sideType = null;
+            if(isVictim.equals("SI"))
+                victim=true;
+            if (aggression.getSelectionModel().getSelectedItem().equals("VIOLENCIA SEXUAL"))
+                aggressionType = AggressionType.VIOLENCIA_SEXUAL;
+            if (aggression.getSelectionModel().getSelectedItem().equals("VIOLENCIA HOMICIDA CON ARMAS"))
+                aggressionType = AggressionType.VIOLENCIA_HOMICIDA_CON_ARMAS;
+            if (aggression.getSelectionModel().getSelectedItem().equals("VIOLENCIA CON ARMAS"))
+                aggressionType = AggressionType.VIOLENCIA_CON_ARMAS;
+            if (side.getSelectionModel().getSelectedItem().equals("POLICIA"))
+                sideType = Side.POLICE;
+            if (side.getSelectionModel().getSelectedItem().equals("MANIFESTANTE"))
+                sideType = Side.CIVILIAN;
 
+
+            try {
+                Persona p = new Persona(nameInput.getText(),lastNameInput.getText(),Integer.parseInt(ageInput.getText()),victim,aggressionType,sideType);
+                this.personaServices.insert(p);
+                nameInput.clear();
+                lastNameInput.clear();
+                ageInput.clear();
+                isVictim.getSelectionModel().clearSelection();
+                side.getSelectionModel().clearSelection();
+                aggression.getSelectionModel().clearSelection();
+
+            } catch (PersonaException personaException) {
+                personaException.printStackTrace();
+            }
+
+        });
+
+        deletePersona.setOnAction(e ->
+        {
+            this.personaServices.delete(personasTable.getSelectionModel().getSelectedItems());
+        });
 
     }
     private void setUp()
@@ -139,8 +186,6 @@ public class MainScene extends Application {
         layout.setTop(menuBar);
 
 
-
-
         scene = new Scene(layout,1100,800);
     }
     private void setUpCrud()
@@ -152,8 +197,6 @@ public class MainScene extends Application {
         addPersona = new Button("Add");
         addPersona.setMinWidth(250);
         addPersona.setPadding(new Insets(20,20,20,20));
-
-
 
         deletePersona = new Button("Delete");
         deletePersona.setMinWidth(250);
@@ -190,6 +233,15 @@ public class MainScene extends Application {
         ageInput = new TextField();
         ageInput.setPromptText("Edad");
         ageInput.setMinWidth(177);
+
+        isVictim = new ChoiceBox(FXCollections.observableArrayList("SI","NO"));
+        isVictim.setMinWidth(150);
+
+        side = new ChoiceBox(FXCollections.observableArrayList("POLICIA","MANIFESTANTE"));
+        side.setMinWidth(150);
+
+        aggression = new ChoiceBox(FXCollections.observableArrayList("VIOLENCIA HOMICIDA CON ARMAS","VIOLENCIA CON ARMAS","VIOLENCIA SEXUAL", "NO APLICA"));
+
 
 
     }
@@ -269,8 +321,21 @@ public class MainScene extends Application {
         hBox2.getChildren().addAll(nameInput,lastNameInput,ageInput);
         hBox2.setPadding(new Insets(20,0,20,0));
         hBox2.setSpacing(10);
-        hBox3 = new HBox();
 
+        Label isVictimChoice = new Label("Es victima?");
+        Label sideChoice = new Label("Bando");
+        Label aggressionChoice = new Label("Tipo de agresion");
+
+        VBox h1 = new VBox();
+        h1.getChildren().addAll(isVictimChoice,isVictim);
+        VBox h2 = new VBox();
+        h2.getChildren().addAll(sideChoice,side);
+        VBox h3 = new VBox();
+        h3.getChildren().addAll(aggressionChoice,aggression);
+
+        hBox3 = new HBox();
+        hBox3.getChildren().addAll(h1,h2,h3);
+        hBox3.setSpacing(12);
 
         crudVBox= new VBox();
         crudVBox.getChildren().addAll(hBox2,hBox3,hBox1);
