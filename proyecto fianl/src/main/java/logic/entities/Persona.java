@@ -56,17 +56,8 @@ public class Persona {
         this.lastName = lastName;
     }
 
-    public void setAge(String ageInput) throws PersonaException {
-        try {
-            int age = Integer.parseInt(ageInput);
-
-            if (age < 0) throw new PersonaException(PersonaException.BAD_AGE_LOWER);
-            if (age > 120) throw new PersonaException(PersonaException.BAD_AGE_UPPER);
-
-            this.age = age;
-        } catch (NumberFormatException er) {
-            throw new PersonaException(PersonaException.BAD_AGE + " : " + er.getMessage());
-        }
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public void setVictim(boolean victim) {
@@ -91,4 +82,5 @@ public class Persona {
     {
         System.out.println("Hola");
     }
+
 }

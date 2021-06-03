@@ -14,3 +14,5 @@ logic/services/impl/IPersonaServices.java
  logic.services.impl.IPersonaServices
 logic/persistence/IPersonaPersistence.java
  logic.persistence.IPersonaPersistence
+logic/persistence/impl/PersonaPersistence.java
+ logic.persistence.impl.PersonaPersistence

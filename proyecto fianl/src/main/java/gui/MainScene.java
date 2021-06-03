@@ -39,12 +39,12 @@ public class MainScene extends Application {
     private HBox hBox1;
     private HBox hBox2;
     private HBox hBox3;
-    private HBox hBox4;
 
     //Buttons
     private Button selectPersona;
     private Button addPersona;
     private Button deletePersona;
+    private Button editPersona;
 
     //TextFields
     private TextField nameInput;
@@ -111,7 +111,6 @@ public class MainScene extends Application {
     private void behaviour(Stage stage)
     {
 
-
         this.personaServices = new PersonaServices();
         this.personaServices.insert(mia);
         this.personaServices.insert(sebas);
@@ -136,6 +135,7 @@ public class MainScene extends Application {
             boolean victim = false;
             Enum aggressionType = AggressionType.NO_APLICA;
             Enum sideType = null;
+
             if(isVictim.equals("SI"))
                 victim=true;
             if (aggression.getSelectionModel().getSelectedItem().equals("VIOLENCIA SEXUAL"))
@@ -150,8 +150,12 @@ public class MainScene extends Application {
                 sideType = Side.CIVILIAN;
 
 
+
             try {
-                Persona p = new Persona(nameInput.getText(),lastNameInput.getText(),Integer.parseInt(ageInput.getText()),victim,aggressionType,sideType);
+                int age = Integer.parseInt(ageInput.getText());
+                if (age < 0) throw new PersonaException(PersonaException.BAD_AGE_LOWER);
+                if (age > 120) throw new PersonaException(PersonaException.BAD_AGE_UPPER);
+                Persona p = new Persona(nameInput.getText(),lastNameInput.getText(),age,victim,aggressionType,sideType);
                 this.personaServices.insert(p);
                 nameInput.clear();
                 lastNameInput.clear();
@@ -162,6 +166,15 @@ public class MainScene extends Application {
 
             } catch (PersonaException personaException) {
                 personaException.printStackTrace();
+
+            }
+            catch (NumberFormatException er)
+            {
+                try {
+                    throw new PersonaException(PersonaException.BAD_AGE + " : " + er.getMessage());
+                } catch (PersonaException personaException) {
+                    personaException.printStackTrace();
+                }
             }
 
         });
@@ -169,6 +182,42 @@ public class MainScene extends Application {
         deletePersona.setOnAction(e ->
         {
             this.personaServices.delete(personasTable.getSelectionModel().getSelectedItems());
+        });
+        fileMenuItems.get("Export").setOnAction(e ->
+        {
+            try {
+                this.personaServices.export();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        editPersona.setOnAction(e ->
+        {
+            boolean victim = false;
+            Enum aggressionType = AggressionType.NO_APLICA;
+            Enum sideType = null;
+
+            if(isVictim.equals("SI"))
+                victim=true;
+            if (aggression.getSelectionModel().getSelectedItem().equals("VIOLENCIA SEXUAL"))
+                aggressionType = AggressionType.VIOLENCIA_SEXUAL;
+            if (aggression.getSelectionModel().getSelectedItem().equals("VIOLENCIA HOMICIDA CON ARMAS"))
+                aggressionType = AggressionType.VIOLENCIA_HOMICIDA_CON_ARMAS;
+            if (aggression.getSelectionModel().getSelectedItem().equals("VIOLENCIA CON ARMAS"))
+                aggressionType = AggressionType.VIOLENCIA_CON_ARMAS;
+            if (side.getSelectionModel().getSelectedItem().equals("POLICIA"))
+                sideType = Side.POLICE;
+            if (side.getSelectionModel().getSelectedItem().equals("MANIFESTANTE"))
+                sideType = Side.CIVILIAN;
+
+            this.personaServices.edit(nameInput.getText(),lastNameInput.getText(),Integer.parseInt(ageInput.getText()),victim,aggressionType,sideType,personasTable.getSelectionModel().getSelectedItem());
+            nameInput.clear();
+            lastNameInput.clear();
+            ageInput.clear();
+            isVictim.getSelectionModel().clearSelection();
+            side.getSelectionModel().clearSelection();
+            aggression.getSelectionModel().clearSelection();
         });
 
     }
@@ -195,12 +244,16 @@ public class MainScene extends Application {
         selectPersona.setPadding(new Insets(20));
 
         addPersona = new Button("Add");
-        addPersona.setMinWidth(250);
+        addPersona.setMinWidth(150);
         addPersona.setPadding(new Insets(20,20,20,20));
 
         deletePersona = new Button("Delete");
-        deletePersona.setMinWidth(250);
+        deletePersona.setMinWidth(150);
         deletePersona.setPadding(new Insets(20));
+
+        editPersona = new Button("Editar");
+        editPersona.setMinWidth(150);
+        editPersona.setPadding(new Insets(20));
 
 
     }
@@ -314,7 +367,7 @@ public class MainScene extends Application {
 
 
         hBox1 = new HBox();
-        hBox1.getChildren().addAll(addPersona,deletePersona);
+        hBox1.getChildren().addAll(addPersona,deletePersona,editPersona);
         hBox1.setPadding(new Insets(20,0,20,0));
         hBox1.setSpacing(50);
         hBox2 = new HBox();
