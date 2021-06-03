@@ -34,11 +34,13 @@ public class MainScene extends Application {
     private VBox layout3;
     private VBox infoLayout;
     private VBox crudVBox;
+    private VBox summaryLayout = new VBox();
 
     //Hbox
     private HBox hBox1;
     private HBox hBox2;
     private HBox hBox3;
+
 
     //Buttons
     private Button selectPersona;
@@ -56,20 +58,26 @@ public class MainScene extends Application {
     private ChoiceBox side;
     private ChoiceBox aggression;
 
-    //Labels
+    //Info Labels
     private Label nameTitle;
     private Label ageInfo;
     private Label victimInfo;
     private Label aggressionInfo;
     private Label sideInfo;
 
+    //Summary Labels
+    private Label totalVictimsNumber;
+    private Label totalVictim;
+
     //VisualProperties
     private Scene scene;
+    private Scene scene2;
     private TableView<Persona> personasTable;
 
     //Menu
     private MenuBar menuBar;
     private Map<String, MenuItem> fileMenuItems;
+
 
     //Logic Properties
     private IPersonaServices personaServices;
@@ -106,6 +114,8 @@ public class MainScene extends Application {
         primaryStage.setTitle("CRUD");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
 
     }
     private void behaviour(Stage stage)
@@ -163,6 +173,7 @@ public class MainScene extends Application {
                     personaException.printStackTrace();
                 }
             }
+            totalVictimsNumber.setText(String.valueOf(personaServices.getAll().size()));
 
         });
 
@@ -177,11 +188,13 @@ public class MainScene extends Application {
                 isVictim1="SI";
             victimInfo.setText("Es victima?: "+isVictim1);
             aggressionInfo.setText("Tipo de agresion: "+ personasTable.getSelectionModel().getSelectedItem().getAggressionType());
+
         });
 
         deletePersona.setOnAction(e ->
         {
             this.personaServices.delete(personasTable.getSelectionModel().getSelectedItems());
+            totalVictimsNumber.setText(String.valueOf(personaServices.getAll().size()));
         });
         fileMenuItems.get("Export").setOnAction(e ->
         {
@@ -311,6 +324,19 @@ public class MainScene extends Application {
         directoryMenu.getItems().add(fileMenuItems.get("Export"));
 
         Menu summaryMenu = new Menu("Summary");
+        Stage summary = new Stage();
+
+        this.scene2 = new Scene(summaryLayout,900,500);
+
+        fileMenuItems.put("Show summary",new MenuItem("Show summary"));
+
+        summaryMenu.getItems().add(fileMenuItems.get("Show summary"));
+        summaryMenu.setOnAction(e->
+        {
+            summary.show();
+            summary.setScene(scene2);
+            totalVictimsNumber.setText(String.valueOf(personaServices.getAll().size()));
+        });
 
         menuBar = new MenuBar();
         menuBar.getMenus().addAll(directoryMenu,summaryMenu);
@@ -318,6 +344,7 @@ public class MainScene extends Application {
     }
     private void setUplayout()
     {
+
         layout2 = new VBox();
 
 
@@ -395,5 +422,30 @@ public class MainScene extends Application {
 
         infoLayout.getChildren().addAll(ageInfo,sideInfo,victimInfo,aggressionInfo,selectPersona);
         layout2.getChildren().addAll(nameTitle,infoLayout,crudVBox);
+
+        //Summary menu layout
+
+
+        HBox f = new HBox();
+
+        f.setPadding(new Insets(20,0,0,80));
+
+        totalVictim = new Label("Victimas de agresion fisica grave o letal");
+        totalVictim.setMinWidth(650);
+        totalVictim.setPadding(new Insets(11,0,0,0));
+        totalVictim.setAlignment(Pos.CENTER_RIGHT);
+        totalVictim.setFont(new Font(35));
+
+        totalVictimsNumber = new Label();
+        //totalVictimsNumber.setMinWidth(20);
+        totalVictimsNumber.setAlignment(Pos.CENTER_LEFT);
+        totalVictimsNumber.setFont(new Font(50));
+        f.getChildren().addAll(totalVictimsNumber,totalVictim);
+
+
+        GridPane g = new GridPane();
+
+
+        summaryLayout.getChildren().addAll(f,g);
     }
 }

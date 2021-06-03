@@ -19,4 +19,6 @@ public interface IPersonaServices {
     List<Persona> importPersonas(File file) throws Exception;
 
     Persona edit(String name, String lastName, int age, boolean isVictim, Enum aggressionType, Enum side, Persona a);
+
+
 }

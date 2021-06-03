@@ -10,9 +10,9 @@ logic/entities/AggressionType.java
  logic.entities.AggressionType
 logic/services/impl/PersonaServices.java
  logic.services.impl.PersonaServices
-logic/persistence/IPersonaPersistence.java
- logic.persistence.IPersonaPersistence
-logic/services/impl/IPersonaServices.java
- logic.services.impl.IPersonaServices
 gui/MainScene.java
  gui.MainScene
+logic/services/impl/IPersonaServices.java
+ logic.services.impl.IPersonaServices
+logic/persistence/IPersonaPersistence.java
+ logic.persistence.IPersonaPersistence
