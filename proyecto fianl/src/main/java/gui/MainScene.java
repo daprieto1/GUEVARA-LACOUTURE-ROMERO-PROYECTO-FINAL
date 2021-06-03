@@ -64,10 +64,29 @@ public class MainScene extends Application {
     private Label victimInfo;
     private Label aggressionInfo;
     private Label sideInfo;
+    private Label isVictimChoice;
+    private Label sideChoice;
+    private Label aggressionChoice;
 
     //Summary Labels
     private Label totalVictimsNumber;
     private Label totalVictim;
+    private Label totalPoliceVictims;
+    private Label totalPoliceVictimsNumber;
+    private Label totalCiviliansVictims;
+    private Label totalCiviliansVictimsNumber;
+    private Label pViolenciaHomicida;
+    private Label pViolenciaHomicidaNumber;
+    private Label pViolenciaConArmas;
+    private Label pViolenciaConArmasNumber;
+    private Label pViolenciaSexual;
+    private Label pViolenciaSexualNumber;
+    private Label mViolenciaHomicida;
+    private Label mViolenciaHomicidaNumber;
+    private Label mViolenciaConArmas;
+    private Label mViolenciaConArmasNumber;
+    private Label mViolenciaSexual;
+    private Label mViolenciaSexualNumber;
 
     //VisualProperties
     private Scene scene;
@@ -174,7 +193,11 @@ public class MainScene extends Application {
                 }
             }
             totalVictimsNumber.setText(String.valueOf(personaServices.getVictims().size()));
-
+            totalPoliceVictimsNumber.setText(String.valueOf(personaServices.getpViolenciaSexual().size()+personaServices.getpViolenciaHomicida().size()+personaServices.getpViolenciaConArmas().size()));
+            totalCiviliansVictimsNumber.setText(String.valueOf(personaServices.getmViolenciaSexual().size()+personaServices.getmViolenciaHomicida().size()+personaServices.getmViolenciaConArmas().size()));
+            pViolenciaConArmasNumber.setText(String.valueOf(personaServices.getpViolenciaConArmas().size()));
+            pViolenciaHomicidaNumber.setText(String.valueOf(personaServices.getpViolenciaHomicida().size()));
+            pViolenciaSexualNumber.setText(String.valueOf(personaServices.getmViolenciaSexual().size()));
         });
 
         selectPersona.setOnAction(e ->
@@ -193,8 +216,13 @@ public class MainScene extends Application {
 
         deletePersona.setOnAction(e ->
         {
-            this.personaServices.delete(personasTable.getSelectionModel().getSelectedItems());
+            this.personaServices.delete(personasTable.getSelectionModel().getSelectedItem());
             totalVictimsNumber.setText(String.valueOf(personaServices.getVictims().size()));
+            totalPoliceVictimsNumber.setText(String.valueOf(personaServices.getpViolenciaSexual().size()+personaServices.getpViolenciaHomicida().size()+personaServices.getpViolenciaConArmas().size()));
+            totalCiviliansVictimsNumber.setText(String.valueOf(personaServices.getmViolenciaSexual().size()+personaServices.getmViolenciaHomicida().size()+personaServices.getmViolenciaConArmas().size()));
+            pViolenciaConArmasNumber.setText(String.valueOf(personaServices.getpViolenciaConArmas().size()));
+            pViolenciaHomicidaNumber.setText(String.valueOf(personaServices.getpViolenciaHomicida().size()));
+            pViolenciaSexualNumber.setText(String.valueOf(personaServices.getmViolenciaSexual().size()));
         });
         fileMenuItems.get("Export").setOnAction(e ->
         {
@@ -211,7 +239,7 @@ public class MainScene extends Application {
             Enum aggressionType = AggressionType.NO_APLICA;
             Enum sideType = null;
 
-            if(isVictim.equals("SI"))
+            if(isVictim.getSelectionModel().getSelectedItem().equals("SI"))
                 victim=true;
             if (aggression.getSelectionModel().getSelectedItem().equals("VIOLENCIA SEXUAL"))
                 aggressionType = AggressionType.VIOLENCIA_SEXUAL;
@@ -231,6 +259,13 @@ public class MainScene extends Application {
             isVictim.getSelectionModel().clearSelection();
             side.getSelectionModel().clearSelection();
             aggression.getSelectionModel().clearSelection();
+
+            totalVictimsNumber.setText(String.valueOf(personaServices.getVictims().size()));
+            totalPoliceVictimsNumber.setText(String.valueOf(personaServices.getpViolenciaSexual().size()+personaServices.getpViolenciaHomicida().size()+personaServices.getpViolenciaConArmas().size()));
+            totalCiviliansVictimsNumber.setText(String.valueOf(personaServices.getmViolenciaSexual().size()+personaServices.getmViolenciaHomicida().size()+personaServices.getmViolenciaConArmas().size()));
+            pViolenciaConArmasNumber.setText(String.valueOf(personaServices.getpViolenciaConArmas().size()));
+            pViolenciaHomicidaNumber.setText(String.valueOf(personaServices.getpViolenciaHomicida().size()));
+            pViolenciaSexualNumber.setText(String.valueOf(personaServices.getmViolenciaSexual().size()));
         });
 
     }
@@ -240,7 +275,9 @@ public class MainScene extends Application {
         setUpInputs();
         setupTable();
         setUpMenu();
+        setUpLabels();
         setUplayout();
+
 
         BorderPane layout = new BorderPane();
         layout.setLeft(layout3);
@@ -326,7 +363,7 @@ public class MainScene extends Application {
         Menu summaryMenu = new Menu("Summary");
         Stage summary = new Stage();
 
-        this.scene2 = new Scene(summaryLayout,900,500);
+        this.scene2 = new Scene(summaryLayout,1325,500);
 
         fileMenuItems.put("Show summary",new MenuItem("Show summary"));
 
@@ -336,23 +373,19 @@ public class MainScene extends Application {
             summary.show();
             summary.setScene(scene2);
             totalVictimsNumber.setText(String.valueOf(personaServices.getVictims().size()));
+            totalPoliceVictimsNumber.setText(String.valueOf(personaServices.getpViolenciaSexual().size()+personaServices.getpViolenciaHomicida().size()+personaServices.getpViolenciaConArmas().size()));
+            totalCiviliansVictimsNumber.setText(String.valueOf(personaServices.getmViolenciaSexual().size()+personaServices.getmViolenciaHomicida().size()+personaServices.getmViolenciaConArmas().size()));
+            pViolenciaConArmasNumber.setText(String.valueOf(personaServices.getpViolenciaConArmas().size()));
+            pViolenciaHomicidaNumber.setText(String.valueOf(personaServices.getpViolenciaHomicida().size()));
+            pViolenciaSexualNumber.setText(String.valueOf(personaServices.getmViolenciaSexual().size()));
         });
 
         menuBar = new MenuBar();
         menuBar.getMenus().addAll(directoryMenu,summaryMenu);
 
     }
-    private void setUplayout()
+    private void setUpLabels()
     {
-
-        layout2 = new VBox();
-
-
-        layout3 = new VBox();
-        layout3.getChildren().addAll(personasTable);
-
-
-
         //NameTitle
         this.nameTitle = new Label("Principales Actores del Paro");
         this.nameTitle.setMinWidth(600);
@@ -361,8 +394,7 @@ public class MainScene extends Application {
         this.nameTitle.setBorder(new Border(new BorderStroke(Color.valueOf("#4498C4"), BorderStrokeStyle.SOLID,CornerRadii.EMPTY,new BorderWidths(5),new Insets(20,50,20,10))));
         this.nameTitle.setFont(Font.font("Arial", FontWeight.BOLD,35));
 
-        //
-        infoLayout = new VBox();
+        //InfoLabels
 
         this.ageInfo = new Label("Edad: ");
         this.ageInfo.setMinWidth(600);
@@ -388,10 +420,78 @@ public class MainScene extends Application {
         this.aggressionInfo.setPadding(new Insets(5,20,30,20));
         this.aggressionInfo.setFont(new Font(20));
 
+        this.isVictimChoice = new Label("Es victima?");
+        this.sideChoice = new Label("Bando");
+        this.aggressionChoice = new Label("Tipo de agresion");
+
+        this.totalVictim = new Label("Victimas de agresion fisica grave o letal");
+        this.totalVictim.setMinWidth(650);
+        this.totalVictim.setPadding(new Insets(11,0,0,0));
+        this.totalVictim.setAlignment(Pos.CENTER_RIGHT);
+        this.totalVictim.setFont(new Font(35));
+
+        this.totalVictimsNumber = new Label();
+        this.totalVictimsNumber.setAlignment(Pos.CENTER_LEFT);
+        this.totalVictimsNumber.setFont(new Font(50));
+
+        this.totalPoliceVictims = new Label("Victimas Policiales\nTotales");
+        this.totalPoliceVictims.setMinWidth(350);
+        this.totalPoliceVictims.setPadding(new Insets(0,0,0,20));
+        this.totalPoliceVictims.setAlignment(Pos.CENTER_LEFT);
+        this.totalPoliceVictims.setFont(new Font(25));
+
+        this.totalPoliceVictimsNumber = new Label("12");
+        this.totalPoliceVictimsNumber.setAlignment(Pos.CENTER_LEFT);
+        this.totalPoliceVictimsNumber.setFont(new Font(40));
+
+        this.totalCiviliansVictims = new Label("Victimas Civiles\nTotales");
+        this.totalCiviliansVictims.setMinWidth(350);
+        this.totalCiviliansVictims.setPadding(new Insets(0,0,0,20));
+        this.totalCiviliansVictims.setAlignment(Pos.CENTER_LEFT);
+        this.totalCiviliansVictims.setFont(new Font(25));
+
+        this.totalCiviliansVictimsNumber = new Label();
+        this.totalCiviliansVictimsNumber.setAlignment(Pos.CENTER_LEFT);
+        this.totalCiviliansVictimsNumber.setFont(new Font(40));
+
+        this.pViolenciaConArmas = new Label("Victimas Policiales\nde Violencia con Armas");
+        this.pViolenciaConArmas.setPadding(new Insets(5,0,0,20));
+        this.pViolenciaConArmas.setAlignment(Pos.CENTER_LEFT);
+        this.pViolenciaConArmas.setFont(new Font(20));
+
+        this.pViolenciaConArmasNumber = new Label();
+        this.pViolenciaConArmasNumber.setAlignment(Pos.CENTER_LEFT);
+        this.pViolenciaConArmasNumber.setFont(new Font(35));
+
+        this.pViolenciaHomicida = new Label("Victimas Policiales\nde Violencia Homicida");
+        this.pViolenciaHomicida.setPadding(new Insets(5,0,0,20));
+        this.pViolenciaHomicida.setAlignment(Pos.CENTER_LEFT);
+        this.pViolenciaHomicida.setFont(new Font(20));
+
+        this.pViolenciaHomicidaNumber = new Label("12");
+        this.pViolenciaHomicidaNumber.setAlignment(Pos.CENTER_LEFT);
+        this.pViolenciaHomicidaNumber.setPadding(new Insets(0,0,0,70));
+        this.pViolenciaHomicidaNumber.setFont(new Font(35));
+
+        this.pViolenciaSexual = new Label("Victimas Policiales\nde Violencia Sexual");
+        this.pViolenciaSexual.setPadding(new Insets(5,0,0,20));
+        this.pViolenciaSexual.setAlignment(Pos.CENTER_LEFT);
+        this.pViolenciaSexual.setFont(new Font(20));
+
+        this.pViolenciaSexualNumber = new Label("12");
+        this.pViolenciaSexualNumber.setAlignment(Pos.CENTER_LEFT);
+        this.pViolenciaSexualNumber.setPadding(new Insets(0,0,0,70));
+        this.pViolenciaSexualNumber.setFont(new Font(35));
+    }
+    private void setUplayout()
+    {
+        layout2 = new VBox();
+        infoLayout = new VBox();
+        layout3 = new VBox();
+        layout3.getChildren().addAll(personasTable);
+
         selectPersona.setMinWidth(550);
         selectPersona.setAlignment(Pos.BOTTOM_CENTER);
-
-
 
         hBox1 = new HBox();
         hBox1.getChildren().addAll(addPersona,deletePersona,editPersona);
@@ -401,10 +501,6 @@ public class MainScene extends Application {
         hBox2.getChildren().addAll(nameInput,lastNameInput,ageInput);
         hBox2.setPadding(new Insets(20,0,20,0));
         hBox2.setSpacing(10);
-
-        Label isVictimChoice = new Label("Es victima?");
-        Label sideChoice = new Label("Bando");
-        Label aggressionChoice = new Label("Tipo de agresion");
 
         VBox h1 = new VBox();
         h1.getChildren().addAll(isVictimChoice,isVictim);
@@ -425,27 +521,19 @@ public class MainScene extends Application {
 
         //Summary menu layout
 
-
         HBox f = new HBox();
-
         f.setPadding(new Insets(20,0,0,80));
-
-        totalVictim = new Label("Victimas de agresion fisica grave o letal");
-        totalVictim.setMinWidth(650);
-        totalVictim.setPadding(new Insets(11,0,0,0));
-        totalVictim.setAlignment(Pos.CENTER_RIGHT);
-        totalVictim.setFont(new Font(35));
-
-        totalVictimsNumber = new Label();
-        //totalVictimsNumber.setMinWidth(20);
-        totalVictimsNumber.setAlignment(Pos.CENTER_LEFT);
-        totalVictimsNumber.setFont(new Font(50));
         f.getChildren().addAll(totalVictimsNumber,totalVictim);
 
+        HBox f1 = new HBox();
+        f1.setPadding(new Insets(80,0,0,80));
+        f1.getChildren().addAll(totalPoliceVictimsNumber,totalPoliceVictims,pViolenciaConArmasNumber,pViolenciaConArmas,pViolenciaHomicidaNumber,pViolenciaHomicida,pViolenciaSexualNumber,pViolenciaSexual);
 
-        GridPane g = new GridPane();
+        HBox f2 = new HBox();
+        f2.setPadding(new Insets(80,0,0,80));
+        f2.getChildren().addAll(totalCiviliansVictimsNumber,totalCiviliansVictims);
 
-
-        summaryLayout.getChildren().addAll(f,g);
+        summaryLayout.getChildren().addAll(f,f1,f2);
     }
+
 }

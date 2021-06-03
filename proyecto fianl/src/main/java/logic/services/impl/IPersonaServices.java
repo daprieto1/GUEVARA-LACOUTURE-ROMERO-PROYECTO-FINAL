@@ -12,7 +12,7 @@ public interface IPersonaServices {
 
     Persona insert(Persona persona);
 
-    void delete(List<Persona> personasToDelete);
+    void delete(Persona persona);
 
     void export() throws Exception;
 

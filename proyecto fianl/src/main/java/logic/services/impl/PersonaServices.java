@@ -46,8 +46,9 @@ public class PersonaServices implements IPersonaServices {
     }
 
     @Override
-    public void delete(List<Persona> personasToDelete) {
-        personasToDelete.forEach(this.personas::remove);
+    public void delete(Persona persona) {
+        personas.remove(persona);
+        getAllDeletedVictims(persona);
 
 
     }
@@ -74,6 +75,9 @@ public class PersonaServices implements IPersonaServices {
         personas.remove(a);
 
         personas.add(pee);
+
+        getAllVictims(pee);
+        getAllDeletedVictims(a);
         return pee;
     }
 
@@ -101,7 +105,22 @@ public class PersonaServices implements IPersonaServices {
     @Override
     public void getAllDeletedVictims(Persona persona) {
 
-       victims.remove(persona);
+        if (persona.isVictim())
+        {
+            victims.remove(persona);
+            if (persona.getSide().equals(Side.POLICE)&&persona.getAggressionType().equals(AggressionType.VIOLENCIA_HOMICIDA_CON_ARMAS))
+                pViolenciaHomicida.remove(persona);
+            if (persona.getSide().equals(Side.POLICE)&&persona.getAggressionType().equals(AggressionType.VIOLENCIA_CON_ARMAS))
+                pViolenciaConArmas.remove(persona);
+            if (persona.getSide().equals(Side.POLICE)&&persona.getAggressionType().equals(AggressionType.VIOLENCIA_SEXUAL))
+                pViolenciaSexual.remove(persona);
+            if (persona.getSide().equals(Side.CIVILIAN)&&persona.getAggressionType().equals(AggressionType.VIOLENCIA_HOMICIDA_CON_ARMAS))
+                mViolenciaHomicida.remove(persona);
+            if (persona.getSide().equals(Side.CIVILIAN)&&persona.getAggressionType().equals(AggressionType.VIOLENCIA_CON_ARMAS))
+                mViolenciaConArmas.remove(persona);
+            if (persona.getSide().equals(Side.CIVILIAN)&&persona.getAggressionType().equals(AggressionType.VIOLENCIA_SEXUAL))
+                mViolenciaSexual.remove(persona);
+        }
 
     }
 
