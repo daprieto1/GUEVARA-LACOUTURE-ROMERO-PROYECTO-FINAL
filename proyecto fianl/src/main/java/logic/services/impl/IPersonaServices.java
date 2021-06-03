@@ -20,5 +20,23 @@ public interface IPersonaServices {
 
     Persona edit(String name, String lastName, int age, boolean isVictim, Enum aggressionType, Enum side, Persona a);
 
+    Persona getAllVictims(Persona persona);
+
+    void getAllDeletedVictims(Persona persona);
+
+    List<Persona> getpViolenciaHomicida();
+
+    List<Persona> getpViolenciaConArmas();
+
+    List<Persona> getpViolenciaSexual();
+
+    List<Persona> getmViolenciaHomicida();
+
+    List<Persona> getmViolenciaConArmas();
+
+    List<Persona> getmViolenciaSexual();
+
+    List<Persona> getVictims();
+
 
 }

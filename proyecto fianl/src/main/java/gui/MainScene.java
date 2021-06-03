@@ -173,7 +173,7 @@ public class MainScene extends Application {
                     personaException.printStackTrace();
                 }
             }
-            totalVictimsNumber.setText(String.valueOf(personaServices.getAll().size()));
+            totalVictimsNumber.setText(String.valueOf(personaServices.getVictims().size()));
 
         });
 
@@ -194,7 +194,7 @@ public class MainScene extends Application {
         deletePersona.setOnAction(e ->
         {
             this.personaServices.delete(personasTable.getSelectionModel().getSelectedItems());
-            totalVictimsNumber.setText(String.valueOf(personaServices.getAll().size()));
+            totalVictimsNumber.setText(String.valueOf(personaServices.getVictims().size()));
         });
         fileMenuItems.get("Export").setOnAction(e ->
         {
@@ -335,7 +335,7 @@ public class MainScene extends Application {
         {
             summary.show();
             summary.setScene(scene2);
-            totalVictimsNumber.setText(String.valueOf(personaServices.getAll().size()));
+            totalVictimsNumber.setText(String.valueOf(personaServices.getVictims().size()));
         });
 
         menuBar = new MenuBar();
