@@ -117,26 +117,13 @@ public class MainScene extends Application {
 
         personasTable.setItems((ObservableList<Persona>) this.personaServices.getAll());
 
-        selectPersona.setOnAction(e ->
-        {
-            String isVictim = "NO";
-
-            nameTitle.setText( personasTable.getSelectionModel().getSelectedItem().getFull());
-            ageInfo.setText("Edad: "+personasTable.getSelectionModel().getSelectedItem().getAge());
-            sideInfo.setText("Bando: "+personasTable.getSelectionModel().getSelectedItem().getSide());
-            if (personasTable.getSelectionModel().getSelectedItem().isVictim())
-                isVictim="SI";
-            victimInfo.setText("Es victima?: "+isVictim);
-            aggressionInfo.setText("Tipo de agresion: "+ personasTable.getSelectionModel().getSelectedItem().getAggressionType());
-        });
-
         addPersona.setOnAction(e ->
         {
             boolean victim = false;
             Enum aggressionType = AggressionType.NO_APLICA;
             Enum sideType = null;
 
-            if(isVictim.equals("SI"))
+            if (isVictim.getSelectionModel().getSelectedItem().equals("SI"))
                 victim=true;
             if (aggression.getSelectionModel().getSelectedItem().equals("VIOLENCIA SEXUAL"))
                 aggressionType = AggressionType.VIOLENCIA_SEXUAL;
@@ -177,6 +164,19 @@ public class MainScene extends Application {
                 }
             }
 
+        });
+
+        selectPersona.setOnAction(e ->
+        {
+            String isVictim1 = "NO";
+
+            nameTitle.setText( personasTable.getSelectionModel().getSelectedItem().getFull());
+            ageInfo.setText("Edad: "+personasTable.getSelectionModel().getSelectedItem().getAge());
+            sideInfo.setText("Bando: "+personasTable.getSelectionModel().getSelectedItem().getSide());
+            if (personasTable.getSelectionModel().getSelectedItem().isVictim())
+                isVictim1="SI";
+            victimInfo.setText("Es victima?: "+isVictim1);
+            aggressionInfo.setText("Tipo de agresion: "+ personasTable.getSelectionModel().getSelectedItem().getAggressionType());
         });
 
         deletePersona.setOnAction(e ->

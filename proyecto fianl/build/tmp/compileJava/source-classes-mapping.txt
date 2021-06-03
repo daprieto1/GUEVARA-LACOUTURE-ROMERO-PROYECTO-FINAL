@@ -2,17 +2,17 @@ logic/entities/Side.java
  logic.entities.Side
 logic/entities/Persona.java
  logic.entities.Persona
+logic/persistence/impl/PersonaPersistence.java
+ logic.persistence.impl.PersonaPersistence
 logic/PersonaException.java
  logic.PersonaException
 logic/entities/AggressionType.java
  logic.entities.AggressionType
 logic/services/impl/PersonaServices.java
  logic.services.impl.PersonaServices
-gui/MainScene.java
- gui.MainScene
-logic/services/impl/IPersonaServices.java
- logic.services.impl.IPersonaServices
 logic/persistence/IPersonaPersistence.java
  logic.persistence.IPersonaPersistence
-logic/persistence/impl/PersonaPersistence.java
- logic.persistence.impl.PersonaPersistence
+logic/services/impl/IPersonaServices.java
+ logic.services.impl.IPersonaServices
+gui/MainScene.java
+ gui.MainScene
