@@ -30,6 +30,7 @@ public class PersonaPersistence implements IPersonaPersistence {
         ObjectOutputStream out = new ObjectOutputStream(fileOutputStream);
         out.writeObject(persona);
         out.close();
+
     }
 
     @Override
@@ -63,13 +64,18 @@ public class PersonaPersistence implements IPersonaPersistence {
 
         List<Persona> result = FXCollections.observableArrayList();
 
-        try (in) {
-            while (true) {
+        try {
+            while (in.available()>0) {
                 result.add((Persona) in.readObject());
             }
+
         } catch (EOFException | NullPointerException e) {
             System.out.println("Reached end of file");
+        } finally {
+            in.close();
         }
+
+
 
         return result;
     }

@@ -107,6 +107,7 @@ public class MainScene extends Application {
     private Persona mia;
     private Persona sebas;
 
+
     {
         try {
             mia = new Persona("Mia","Lacouture",18,true, AggressionType.VIOLENCIA_HOMICIDA_CON_ARMAS, Side.CIVILIAN);
@@ -115,6 +116,8 @@ public class MainScene extends Application {
             e.printStackTrace();
         }
     }
+
+
 
     public static void main(String[] args) {
         launch(args);

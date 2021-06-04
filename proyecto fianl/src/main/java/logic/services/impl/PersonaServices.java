@@ -48,6 +48,7 @@ public class PersonaServices implements IPersonaServices {
             e.printStackTrace();
         }
 
+
     }
     @Override
     public List<Persona> getAll() {
@@ -64,7 +65,6 @@ public class PersonaServices implements IPersonaServices {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-
 
         return persona;
     }
