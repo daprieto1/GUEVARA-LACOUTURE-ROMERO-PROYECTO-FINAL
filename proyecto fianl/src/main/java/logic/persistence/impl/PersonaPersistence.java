@@ -37,8 +37,21 @@ public class PersonaPersistence implements IPersonaPersistence {
     public List<Persona> read(String path) throws IOException, ClassNotFoundException {
 
         FileInputStream fis = new FileInputStream(path);
-        ObjectInputStream in = new ObjectInputStream(fis);
-        return readPersonasWithSabanaExtension(in);
+        ArrayList<Persona> personas = new ArrayList<>();
+        boolean count = true;
+        while(count){
+            try(ObjectInputStream in = new ObjectInputStream(fis)){
+                Persona p = (Persona) in.readObject();
+                if(p!=null){
+                    personas.add(p);
+                    
+                }else{
+                    count = false;
+                }
+            }catch(Exception e){
+                System.out.println(e.printStackTrace())
+            }
+        }
     }
 
     @Override
