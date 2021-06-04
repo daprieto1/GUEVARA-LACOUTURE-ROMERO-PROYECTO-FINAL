@@ -2,7 +2,11 @@ package logic.entities;
 
 import logic.PersonaException;
 
-public class Persona {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Persona extends Exportable implements Serializable {
 
     private String name;
     private String lastName;
@@ -83,4 +87,38 @@ public class Persona {
         System.out.println("Hola");
     }
 
+    @Override
+    public List<String> toListString() {
+
+        String  vistima = "NO";
+        String  agresion = String.valueOf(AggressionType.NO_APLICA);
+        String  lado = String.valueOf(Side.CIVILIAN);
+
+        if (isVictim)
+            vistima= "SI";
+        if (aggressionType.equals(AggressionType.VIOLENCIA_SEXUAL))
+            agresion= "Violencia Sexual";
+        if (aggressionType.equals(AggressionType.VIOLENCIA_HOMICIDA_CON_ARMAS))
+            agresion= "Violencia Homicida";
+        if (aggressionType.equals(AggressionType.VIOLENCIA_CON_ARMAS))
+            agresion= "Violencia Con Armas";
+        if (side.equals(Side.POLICE))
+            lado = "Policia";
+        if (side.equals(Side.CIVILIAN))
+            lado = "Manifestante";
+
+        List<String> result = new ArrayList<>();
+        result.add(this.name);
+        result.add(this.lastName);
+        result.add(String.valueOf(this.age));
+        result.add(vistima);
+        result.add(agresion);
+        result.add(lado);
+        return result;
+    }
+
+    @Override
+    public String getHeader() {
+        return "Nombre, Apellido, Edad, Es Victima?, Tipo de agresión, Bando";
+    }
 }

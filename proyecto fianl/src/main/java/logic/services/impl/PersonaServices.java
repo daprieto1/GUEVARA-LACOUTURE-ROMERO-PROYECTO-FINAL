@@ -4,12 +4,18 @@ import javafx.collections.FXCollections;
 
 import logic.PersonaException;
 import logic.entities.AggressionType;
+import logic.entities.Exportable;
 import logic.entities.Persona;
 import logic.entities.Side;
+import logic.persistence.IPersonaPersistence;
+import logic.persistence.impl.Export;
+import logic.persistence.impl.IExport;
+import logic.persistence.impl.PersonaPersistence;
 
 
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +33,21 @@ public class PersonaServices implements IPersonaServices {
     private List<Persona> mViolenciaConArmas=new ArrayList<>();
     private List<Persona> mViolenciaSexual=new ArrayList<>();
 
-    public PersonaServices() {
+    private static IExport export = new Export();
+    private IPersonaPersistence personaPersistence;
+
+    public PersonaServices() throws IOException, ClassNotFoundException {
+
         this.personas = FXCollections.observableArrayList();
+
+        try {
+            this.personaPersistence = new PersonaPersistence();
+            this.export = new Export();
+            this.personas = personaPersistence.read("personas.sabana");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
     @Override
     public List<Persona> getAll() {
@@ -40,6 +59,11 @@ public class PersonaServices implements IPersonaServices {
     {
         personas.add(persona);
         getAllVictims(persona);
+        try {
+            personaPersistence.save(persona);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
 
 
         return persona;
@@ -55,12 +79,26 @@ public class PersonaServices implements IPersonaServices {
 
     @Override
     public void export() throws Exception{
+        List<Exportable> e = new ArrayList<>();
+        this.personas.stream().forEach(p -> e.add(p));
+        export.export(e,Exportable.CSV);
 
     }
 
     @Override
     public List<Persona> importPersonas(File file) throws Exception {
-        return null;
+            List<Persona> importedPersonas = new ArrayList<>();
+            List<String> read = this.personaPersistence.importPersonas(file);
+
+            for (String line : read) {
+                String[] tokens = line.split(Exportable.CSV.toString());
+                Persona persona = new Persona(tokens[0], tokens[1], 25,true,AggressionType.VIOLENCIA_HOMICIDA_CON_ARMAS,Side.POLICE);
+                importedPersonas.add(persona);
+                this.insert(persona);
+            }
+
+            return importedPersonas;
+
     }
 
     @Override

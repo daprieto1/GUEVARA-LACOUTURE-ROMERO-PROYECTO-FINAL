@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import logic.PersonaException;
 import logic.entities.AggressionType;
@@ -23,6 +24,8 @@ import logic.services.impl.PersonaServices;
 
 import javax.swing.text.LabelView;
 import javax.xml.crypto.NodeSetData;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.IllegalFormatCodePointException;
 import java.util.Map;
@@ -102,43 +105,31 @@ public class MainScene extends Application {
     private IPersonaServices personaServices;
     //Persona
     private Persona mia;
-
-    {
-        try {
-            mia = new Persona("Mia","Lacouture",18,true, AggressionType.VIOLENCIA_HOMICIDA_CON_ARMAS, Side.CIVILIAN);
-        } catch (PersonaException e) {
-            e.printStackTrace();
-        }
-    }
     private Persona sebas;
 
     {
         try {
+            mia = new Persona("Mia","Lacouture",18,true, AggressionType.VIOLENCIA_HOMICIDA_CON_ARMAS, Side.CIVILIAN);
             sebas = new Persona("Sebastian","Guevara",19,false, AggressionType.VIOLENCIA_SEXUAL, Side.POLICE);
         } catch (PersonaException e) {
             e.printStackTrace();
         }
     }
 
-
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException, ClassNotFoundException {
 
         setUp();
         behaviour(primaryStage);
         primaryStage.setTitle("CRUD");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
-
     }
-    private void behaviour(Stage stage)
-    {
+    private void behaviour(Stage stage) throws IOException, ClassNotFoundException {
 
         this.personaServices = new PersonaServices();
         this.personaServices.insert(mia);
@@ -198,6 +189,7 @@ public class MainScene extends Application {
             pViolenciaConArmasNumber.setText(String.valueOf(personaServices.getpViolenciaConArmas().size()));
             pViolenciaHomicidaNumber.setText(String.valueOf(personaServices.getpViolenciaHomicida().size()));
             pViolenciaSexualNumber.setText(String.valueOf(personaServices.getmViolenciaSexual().size()));
+            mViolenciaConArmasNumber.setText(String.valueOf(personaServices.getmViolenciaConArmas().size()));
             mViolenciaHomicidaNumber.setText(String.valueOf(personaServices.getmViolenciaHomicida().size()));
             mViolenciaSexualNumber.setText(String.valueOf(personaServices.getmViolenciaSexual().size()));
         });
@@ -274,6 +266,30 @@ public class MainScene extends Application {
             mViolenciaConArmasNumber.setText(String.valueOf(personaServices.getmViolenciaConArmas().size()));
             mViolenciaHomicidaNumber.setText(String.valueOf(personaServices.getmViolenciaHomicida().size()));
             mViolenciaSexualNumber.setText(String.valueOf(personaServices.getmViolenciaSexual().size()));
+        });
+
+        fileMenuItems.get("Export").setOnAction(e ->
+        {
+            try {
+                this.personaServices.export();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        });
+        fileMenuItems.get("Import").setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select personas file");
+            File file = fileChooser.showOpenDialog(stage);
+            if (file == null) {
+                System.out.println("No file");
+            } else {
+                try {
+                    this.personaServices.importPersonas(file);
+                    this.personaServices.getAll().stream().forEach(p -> System.out.println(p));
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
         });
 
     }
@@ -479,7 +495,7 @@ public class MainScene extends Application {
         this.pViolenciaHomicida.setAlignment(Pos.CENTER_LEFT);
         this.pViolenciaHomicida.setFont(new Font(20));
 
-        this.pViolenciaHomicidaNumber = new Label("12");
+        this.pViolenciaHomicidaNumber = new Label();
         this.pViolenciaHomicidaNumber.setAlignment(Pos.CENTER_LEFT);
         this.pViolenciaHomicidaNumber.setPadding(new Insets(0,0,0,70));
         this.pViolenciaHomicidaNumber.setFont(new Font(35));
@@ -489,7 +505,7 @@ public class MainScene extends Application {
         this.pViolenciaSexual.setAlignment(Pos.CENTER_LEFT);
         this.pViolenciaSexual.setFont(new Font(20));
 
-        this.pViolenciaSexualNumber = new Label("12");
+        this.pViolenciaSexualNumber = new Label();
         this.pViolenciaSexualNumber.setAlignment(Pos.CENTER_LEFT);
         this.pViolenciaSexualNumber.setPadding(new Insets(0,0,0,70));
         this.pViolenciaSexualNumber.setFont(new Font(35));
@@ -499,7 +515,7 @@ public class MainScene extends Application {
         this.mViolenciaConArmas.setAlignment(Pos.CENTER_LEFT);
         this.mViolenciaConArmas.setFont(new Font(20));
 
-        this.mViolenciaConArmasNumber = new Label("12");
+        this.mViolenciaConArmasNumber = new Label();
         this.mViolenciaConArmasNumber.setAlignment(Pos.CENTER_LEFT);
         this.mViolenciaConArmasNumber.setFont(new Font(35));
 
@@ -508,7 +524,7 @@ public class MainScene extends Application {
         this.mViolenciaHomicida.setPadding(new Insets(5,0,0,20));
         this.mViolenciaHomicida.setFont(new Font(20));
 
-        this.mViolenciaHomicidaNumber = new Label("12");
+        this.mViolenciaHomicidaNumber = new Label();
         this.mViolenciaHomicidaNumber.setAlignment(Pos.CENTER_LEFT);
         this.mViolenciaHomicidaNumber.setPadding(new Insets(0,0,0,70));
         this.mViolenciaHomicidaNumber.setFont(new Font(35));
